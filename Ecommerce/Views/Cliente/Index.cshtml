@@ -5,7 +5,9 @@
 }
 
 <h2>Lista de clientes</h2>
-
+<div class="form-group">
+    <div class='alert alert-danger @ViewBag.hideerro' role='alert'>@ViewBag.mensagem</div>
+</div>
 <table class="table">
     <tr>
         <th>
@@ -28,7 +30,7 @@
 
 @foreach (var item in Model) {
     <tr>
-        <td>
+        <td class="form-control-cpf">
             @Html.DisplayFor(modelItem => item.cpf)
         </td>
         <td>

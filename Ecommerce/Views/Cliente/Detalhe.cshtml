@@ -7,6 +7,9 @@
 <div>
     <h4>Informações detalhada do cliente</h4>
     <hr />
+    <div class="form-group">
+        <div class='alert alert-danger @ViewBag.hideerro' role='alert'>@ViewBag.mensagem</div>
+    </div>
     <dl class="dl-horizontal">
         <dt>
             
@@ -47,6 +50,42 @@
         <dd>
             @Html.DisplayFor(model => model.estadocivil)
         </dd>
+
+
+        <dt>
+            @Html.DisplayNameFor(model => model.telefones)
+        </dt>
+
+        @if (!string.IsNullOrEmpty(Model.telefones[0].numero))
+        {
+            <dd>
+                @Html.DisplayFor(model => model.telefones[0].numero)
+            </dd>
+        }
+        else
+        {
+            <dd>
+                @Html.DisplayName("Sem telefone")
+            </dd>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.telefones[1].numero))
+        {
+            <dt>
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.telefones[1].numero)
+            </dd>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.telefones[2].numero))
+        {
+            <dt>
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.telefones[2].numero)
+            </dd>
+        }
 
         <dt>
             @Html.DisplayNameFor(model => model.logradouro)
@@ -91,6 +130,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Editar", "Editar", new { id = Model._id }) |    
+    @Html.ActionLink("Editar", "Editar", new { cpf = Model.cpf }) |
     @Html.ActionLink("Exibir lista de clientes", "Index")
 </p>

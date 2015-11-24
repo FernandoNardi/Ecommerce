@@ -14,7 +14,7 @@ namespace Ecommerce.Models
         public string _id { get; set; }
 
         [Required(ErrorMessage = "CPF obrigatório")]
-        [StringLength(12, MinimumLength = 11,  ErrorMessage = "O cpf deve conter obrigatóriamente 11 números.")]
+        [StringLength(50, MinimumLength = 14,  ErrorMessage = "O cpf deve conter obrigatóriamente 11 números.")]
         [DisplayName("CPF")]
         public string cpf { get; set; }
 
@@ -24,19 +24,21 @@ namespace Ecommerce.Models
 
         [Required(ErrorMessage = "E-mail obrigatório")]
         [DisplayName("e-mail")]
+        [RegularExpression(@"^(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6}$", ErrorMessage = "Informe um email válido")]
         public string email { get; set; }
 
         [Required(ErrorMessage = "Estado civil obrigatório")]
         [DisplayName("Estado civil")]
         public string estadocivil { get; set; }
 
+        [DisplayName("Telefones")]
         public List<Telefone> telefones { get; set; }
 
         [Required(ErrorMessage = "Logradouro obrigatório")]
         [DisplayName("Logradouro")]
         public string logradouro { get; set; }
 
-        [Required(ErrorMessage = "Número")]
+        [Required(ErrorMessage = "Somente número")]
         public Nullable<int> numero { get; set; }
 
         [Required(ErrorMessage = "Bairro obrigatório")]
@@ -54,8 +56,8 @@ namespace Ecommerce.Models
 
     public class Telefone
     {
-        public Nullable<int> ddd { get; set; }
-        public Nullable<int> numero { get; set; }
+        //public Nullable<int> ddd { get; set; }
+        public string numero { get; set; }
     }
 
 }

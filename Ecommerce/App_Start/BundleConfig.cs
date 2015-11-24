@@ -13,6 +13,7 @@ namespace Ecommerce
 
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
                         "~/Scripts/jquery.validate*",
+                        "~/Scripts/jquery.mask.min.js",
                         "~/Scripts/app/ecommerce.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're

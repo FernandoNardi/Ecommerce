@@ -27,7 +27,19 @@ textarea {
     margin-top: 5px;
 }
 
-.telefone {
+.exc {
+    padding-left: 0!important;
+}
+
+.excluir-telefone {
+    cursor: pointer;   
+}
+
+.telefone-adicionar {
     cursor: pointer;
-    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+.telefone {
+    margin-bottom: 0!important;
 }

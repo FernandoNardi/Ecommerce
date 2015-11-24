@@ -1,15 +1,32 @@
 ﻿$(document).ready(function () {
 
     $('#confirmar').click(function () {
-        if ($('#ddd_0').val().trim().length > 0 && $('#telefone_0').val().trim().length > 0 ||
-            $('#ddd_1').val().trim().length > 0 && $('#telefone_1').val().trim().length > 0 ||
-            $('#ddd_2').val().trim().length > 0 && $('#telefone_2').val().trim().length > 0) {            
+        if ($('#telefone_0').val() || $('#telefone_1').val() || $('#telefone_2').val()) {
+
+            if ($('#telefone_0').val()) {
+                if ($('#telefone_0').val().length < 13) {
+                    alert("Telefone 1 inválido");
+                    return false;
+                }
+            }
+            if ($('#telefone_1').val()) {
+                if ($('#telefone_1').val().length < 13) {
+                    alert("Telefone 2 inválido");
+                    return false;
+                }
+            }
+            if ($('#telefone_2').val()) {
+                if ($('#telefone_2').val().length < 13) {
+                    alert("Telefone 3 inválido");
+                    return false;
+                }
+            }
             return true;
         }
         else {
             alert("É obrigatório ter pelo menos um telefone.");
             return false;
-        }        
+        }
     });
 
     $('#adicionar-telefone').click(function () {
@@ -29,26 +46,19 @@
     });
 
     $('#excluir_1').click(function () {
-        $('#ddd_1, #numero_1').val('');        
+        $('#telefone_1').val('');
         $('#div_telefone_1').addClass('hide');
         $('#adicionar-telefone').removeClass('hide');
     });
 
     $('#excluir_2').click(function () {
-        $('#ddd_2, #numero_2').val('');        
+        $('#telefone_2').val('');
         $('#div_telefone_2').addClass('hide');
         $('#adicionar-telefone').removeClass('hide');
     });
 
-    //var form = $('#frm').closest("form");
-    //$.ajax({
-    //    type: 'POST',
-    //    url: '/Cliente/Cadastrar',
-    //    data: form.serialize(),
-    //    success: function (response) {
-    //        alert("Cliente deletado com sucesso!");
-    //    },
-    //});
+    $(".form-control-telefone").mask("(00) 0000-00009");
+    $(".form-control-cpf").mask("999.999.999-99");
 
 });
 

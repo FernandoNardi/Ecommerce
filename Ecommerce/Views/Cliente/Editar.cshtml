@@ -1,4 +1,5 @@
 ﻿@model Ecommerce.Models.Cliente
+@using Ecommerce.Models
 
 @{
     ViewBag.Title = "Editar";
@@ -14,9 +15,12 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model._id)
         <div class="form-group">
+            <div class='alert alert-danger @ViewBag.hideerro' role='alert'>@ViewBag.mensagem</div>
+        </div>
+        <div class="form-group">
             @Html.LabelFor(model => model.cpf, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.cpf, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.cpf, new { htmlAttributes = new { @class = "form-control form-control-cpf" } })
                 @Html.ValidationMessageFor(model => model.cpf, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -40,7 +44,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.estadocivil, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.estadocivil, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("estadocivil", new SelectList((IEnumerable<EstadoCivil>)EstadoCivil.est, "id", "descricao"), new { @id = "estadocivil", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.estadocivil, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -48,55 +52,46 @@
 
 
 
-        <div id="bloco-telefone" class="form-group">
-            <div id="div_telefone_0" class="col-md-11">
-                @Html.LabelFor(model => model.telefones, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-1">
-                    @Html.EditorFor(model => model.telefones[0].ddd, new { htmlAttributes = new { id = "ddd_0", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.telefones[0].ddd, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    @Html.EditorFor(model => model.telefones[0].numero, new { htmlAttributes = new { id = "numero_1", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.telefones[0].numero, "", new { @class = "text-danger" })
-                </div>
+        <div id="div_telefone_0" class="form-group telefone">
+            @Html.LabelFor(model => model.telefones, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.telefones[0].numero, new { htmlAttributes = new { id = "telefone_0", @class = "form-control form-control-telefone" } })
+                @Html.ValidationMessageFor(model => model.telefones[0].numero, "", new { @class = "text-danger" })
             </div>
-                        
-            <div id="div_telefone_1" class="col-md-11 telefone-adicional @(Model.telefones[1].ddd != null && Model.telefones[1].numero != null ? "" : "hide") ">
-                <div class="col-md-2"></div>
-                <div class="col-md-1">
-                    @Html.EditorFor(model => model.telefones[1].ddd, new { htmlAttributes = new { id = "ddd_1", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.telefones[1].ddd, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    @Html.EditorFor(model => model.telefones[1].numero, new { htmlAttributes = new { id = "numero_1", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.telefones[1].numero, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-1">
-                    <a id="excluir_1" class="excluir-telefone telefone">excluir</a>
-                </div>
-            </div>
-                        
-            <div id="div_telefone_2" class="col-md-11 telefone-adicional @(Model.telefones[2].ddd != null && Model.telefones[2].numero != null ? "" : "hide")">
-                <div class="col-md-2"></div>
-                <div class="col-md-1">
-                    @Html.EditorFor(model => model.telefones[2].ddd, new { htmlAttributes = new { id = "ddd_2", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.telefones[2].ddd, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-2">
-                    @Html.EditorFor(model => model.telefones[2].numero, new { htmlAttributes = new { id = "telefone_2", @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.telefones[2].numero, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-md-1">
-                    <a id="excluir_2" class="excluir-telefone telefone">excluir</a>
-                </div>
-            </div>            
+        </div>
 
-           
-            <div class="col-md-11">
-                <div class="col-md-2"></div>
-                <a id="adicionar-telefone" class="telefone col-md-2 @((Model.telefones[1].ddd == null && Model.telefones[1].numero == null) || (Model.telefones[2].ddd == null && Model.telefones[2].numero == null) ? "" : "hide") ">adicionar</a>
+        <div id="div_telefone_1" class="form-group telefone telefone-adicional @(string.IsNullOrEmpty(Model.telefones[1].numero) ? "hide" : "") ">
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.telefones[1].numero, new { htmlAttributes = new { id = "telefone_1", @class = "form-control form-control-telefone" } })
+                @Html.ValidationMessageFor(model => model.telefones[1].numero, "", new { @class = "text-danger" })
             </div>
+            <div class="col-md-1 exc">
+                <a id="excluir_1" class="excluir-telefone telefone">excluir</a>
+            </div>
+        </div>
 
+        <div id="div_telefone_2" class="form-group telefone telefone-adicional @(string.IsNullOrEmpty(Model.telefones[2].numero) ? "hide" : "") ">
+            <div class="col-md-2"></div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.telefones[2].numero, new { htmlAttributes = new { id = "telefone_2", @class = "form-control form-control-telefone" } })
+                @Html.ValidationMessageFor(model => model.telefones[2].numero, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-1 exc">
+                <a id="excluir_2" class="excluir-telefone telefone">excluir</a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-2"></div>
+            @if (!string.IsNullOrEmpty(Model.telefones[0].numero) || !string.IsNullOrEmpty(Model.telefones[1].numero) || !string.IsNullOrEmpty(Model.telefones[3].numero))
+            {
+                <a id="adicionar-telefone" class="telefone-adicionar col-md-2">adicionar mais telefone</a>
+            }
+            else
+            {
+                <a id="adicionar-telefone" class="telefone-adicionar col-md-2 hide">adicionar mais telefone</a>
+            }            
         </div>
 
 
@@ -137,7 +132,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.estado, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.estado, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DropDownList("estado", new SelectList((IEnumerable<Estado>)Estado.estados, "Nome", "Nome"), new { @id = "estado", @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.estado, "", new { @class = "text-danger" })
             </div>
         </div>

@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Models;
 using Ecommerce.Request;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
@@ -24,10 +25,13 @@ namespace Ecommerce.Controllers
             Resultado resultado = _requestTask.BuscarClientes();
             if (resultado.erro)
             {
+                ViewBag.hideerro = string.Empty;
+                ViewBag.mensagem = resultado.mensagem;
                 return View();
             }
             else
             {
+                ViewBag.hideerro = string.Format("{0}", "hide");
                 return View(resultado.lista);
             }
         }
@@ -38,13 +42,14 @@ namespace Ecommerce.Controllers
 
         [HttpGet]
         public ActionResult Cadastrar()
-        {            
+        {
+            ViewBag.hideerro = string.Format("{0}", "hide");
             return View();
         }
         
         [HttpPost]       
         public ActionResult Cadastrar([Bind(Include = "cpf, nome, email, estadocivil, telefones, logradouro, numero, bairro, cidade, estado")]Cliente cliente)
-        {
+        {            
             try
             {
                 if (ModelState.IsValid)
@@ -52,16 +57,29 @@ namespace Ecommerce.Controllers
                     _requestTask = new RequestTask(this._address);
                     cliente.telefones = verificarTelefone(cliente);
                     Resultado resultado = _requestTask.CadastrarCliente(cliente);
-                    return RedirectToAction("Index");
+                    if (resultado.erro)
+                    {                        
+                        ViewBag.hideerro = string.Empty;
+                        ViewBag.mensagem = resultado.mensagem;
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.hideerro = string.Format("{0}", "hide");
+                        return RedirectToAction("Index");
+                    }
                 }
                 else
                 {
+                    ViewBag.hideerro = string.Empty;
+                    ViewBag.mensagem = string.Format("{0}", "<div class='alert alert-danger' role='alert'>Ocorreu um erro ao cadastrar cliente</div>");
                     return View();
                 }                
             }
             catch (Exception exception)
             {
-                ViewBag.mensagem = "Ocorreu um erro ao salvar o cliente!";
+                ViewBag.hideerro = string.Empty;
+                ViewBag.mensagem = string.Format("{0}", "<div class='alert alert-danger' role='alert'>Ocorreu um erro ao cadastrar cliente</div>");
                 return View();
             }            
         }
@@ -71,7 +89,7 @@ namespace Ecommerce.Controllers
         #region :::: Edição de clientes ::::
                 
         public ActionResult Editar(string cpf = "")
-        {
+        {            
             return GetCliente(cpf);
         }
 
@@ -82,14 +100,27 @@ namespace Ecommerce.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    _requestTask = new RequestTask(string.Format("{0}{1}{2}", this._address, "/", cliente._id));
+                    _requestTask = new RequestTask(string.Format("{0}{1}{2}", this._address, "/", cliente.cpf));
+                    cliente.telefones = verificarTelefone(cliente);
                     Resultado resultado = _requestTask.EditarCliente(cliente);
-                    return RedirectToAction("Index");
+                    if (resultado.erro)
+                    {
+                        ViewBag.hideerro = string.Empty;
+                        ViewBag.mensagem = resultado.mensagem;
+                        return View();
+                    }
+                    else
+                    {
+                        ViewBag.hideerro = string.Format("{0}", "hide");
+                        return RedirectToAction("Index");
+                    }
                 }
             }
             catch (Exception exception)
             {
-                return RedirectToAction("Index");
+                ViewBag.hideerro = string.Empty;
+                ViewBag.mensagem = string.Format("{0}", "Ocorreu um erro ao alterar o cliente");
+                return View();
             }
             return View(cliente);
         }
@@ -109,20 +140,23 @@ namespace Ecommerce.Controllers
             {
                 _requestTask = new RequestTask(string.Format("{0}{1}{2}", this._address, "/", cpf));
                 Resultado resultado = _requestTask.DeleteCliente();
-                if (!resultado.erro)
+                if (resultado.erro)
                 {
-                    //return RedirectToAction("Mensagem", "Cliente", new { mensagem = "Cliente excluido com sucesso" });
-                    return RedirectToAction("Index");
+                    ViewBag.hideerro = string.Empty;
+                    ViewBag.mensagem = resultado.mensagem;
+                    return View();
                 }
-                else {
-                    //return RedirectToAction("Mensagem", "Cliente", new { mensagem = "Ocorreu um erro excluir o cliente" });
+                else
+                {
+                    ViewBag.hideerro = string.Format("{0}", "hide");
                     return RedirectToAction("Index");
                 }
             }
             catch (Exception exception)
-            {
-                //return RedirectToAction("Mensagem", "Cliente", new { mensagem = "Ocorreu um erro excluir o cliente" });
-                return RedirectToAction("Index");
+            {                
+                ViewBag.hideerro = string.Empty;
+                ViewBag.mensagem = string.Format("{0}", "Ocorreu um erro excluir o cliente");
+                return View();
             }            
         }
 
@@ -142,8 +176,9 @@ namespace Ecommerce.Controllers
                 Resultado resultado = _requestTask.BuscarClientes();
                 if (resultado.erro)
                 {
-                    //return RedirectToAction("Mensagem", "Cliente", new { mensagem = "Ops! Algo deu errado ou o cliente não está cadastrado no sistema" });
-                    return RedirectToAction("Index");
+                    ViewBag.hideerro = string.Empty;
+                    ViewBag.mensagem = resultado.mensagem;
+                    return View();
                 }
                 else
                 {
@@ -164,12 +199,14 @@ namespace Ecommerce.Controllers
                             resultado.lista[0].telefones.Add(new Telefone());
                             resultado.lista[0].telefones.Add(new Telefone());
                         }
+                        ViewBag.hideerro = string.Format("{0}", "hide");
                         return View(resultado.lista[0]);
                     }
                     else
-                    {
-                        //return RedirectToAction("Mensagem", "Cliente", new { mensagem = "Cliente não está cadastrado no sistema" });
-                        return RedirectToAction("Index");
+                    {                        
+                        ViewBag.hideerro = string.Empty;
+                        ViewBag.mensagem = string.Format("{0}", "Cliente não está cadastrado no sistema");
+                        return View();
                     }
                 }                
             }
@@ -181,20 +218,15 @@ namespace Ecommerce.Controllers
 
         #endregion
 
-        #region :::: Mensagem :::::
-
-        public ActionResult Mensagem(string mensagem) {
-            ViewBag.mensagem = mensagem;
-            return View();
-        }
-
+        #region :::: Telefone :::::
+        
         public List<Telefone> verificarTelefone(Cliente cliente)
         {
             List<Telefone> telefones = new List<Telefone>();
             if (cliente.telefones != null)
             {
                 foreach (Telefone tel in cliente.telefones) {
-                    if (tel.ddd != null && tel.numero != null) 
+                    if (!string.IsNullOrEmpty(tel.numero)) 
                     {
                         telefones.Add(tel);
                     }
