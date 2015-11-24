@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Ecommerce.Models.Cliente>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Lista de clientes</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.cpf)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.nome)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.estadocivil)
+        </th>
+        <th>            
+            @Html.DisplayName("Endereço")
+        </th>        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.cpf)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.nome)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.estadocivil)
+        </td>
+        <td>
+
+            @Html.DisplayFor(modelItem => item.logradouro)
+            @Html.DisplayFor(modelItem => item.numero)            
+            @Html.DisplayName(",")
+            @Html.DisplayFor(modelItem => item.bairro)
+            @Html.DisplayName(" - ")
+            @Html.DisplayFor(modelItem => item.cidade)
+            @Html.DisplayName("/")
+            @Html.DisplayFor(modelItem => item.estado)
+        </td>        
+        <td>
+            @Html.ActionLink("Editar", "Editar", new {  cpf = item.cpf }) |
+            @Html.ActionLink("Detalhe", "Detalhe", new { cpf = item.cpf }) |
+            @Html.ActionLink("Deletar", "Deletar", new { cpf = item.cpf })
+        </td>
+    </tr>
+}
+
+</table>

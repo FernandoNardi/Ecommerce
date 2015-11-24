@@ -1,0 +1,144 @@
+﻿@model Ecommerce.Models.Cliente
+
+@{
+    ViewBag.Title = "Deletar";
+}
+
+<div>
+    <h4>Excluir cadastro do cliente</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            
+        </dt>
+
+        <dd>
+            @Html.HiddenFor(model => model._id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cpf)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cpf)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estadocivil)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estadocivil)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.telefones)
+        </dt>
+
+        @if(Model.telefones[0].ddd != null && Model.telefones[0].numero != null) {
+            <dd>
+                @Html.DisplayName("(")
+                @Html.DisplayFor(model => model.telefones[0].ddd)
+                @Html.DisplayName(")")
+                @Html.DisplayFor(model => model.telefones[0].numero)
+            </dd>
+        }
+        else
+        {
+            <dd>            
+                @Html.DisplayName("Sem telefone")
+            </dd>
+        }
+        
+        @if (Model.telefones[1].ddd != null && Model.telefones[1].numero != null)
+        {
+            <dt>                
+            </dt>
+            <dd>
+                @Html.DisplayName("(")
+                @Html.DisplayFor(model => model.telefones[1].ddd)
+                @Html.DisplayName(")")
+                @Html.DisplayFor(model => model.telefones[1].numero)
+            </dd>
+        }        
+
+        @if (Model.telefones[2].ddd != null && Model.telefones[2].numero != null)
+        {
+            <dt>
+            </dt>
+            <dd>
+                @Html.DisplayName("(")
+                @Html.DisplayFor(model => model.telefones[2].ddd)
+                @Html.DisplayName(")")
+                @Html.DisplayFor(model => model.telefones[2].numero)
+            </dd>
+        }
+
+        <dt>
+            @Html.DisplayNameFor(model => model.logradouro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.logradouro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.numero)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.numero)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.bairro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.bairro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cidade)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cidade)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.estado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.estado)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @id = "frm" } )) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Deletar cliente" class="btn btn-default" /> |
+            @Html.ActionLink("Exibir lista de clientes", "Index")
+        </div>
+    }
+</div>
